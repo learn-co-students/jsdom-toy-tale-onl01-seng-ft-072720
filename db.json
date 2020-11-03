@@ -4,7 +4,7 @@
       "id": 1,
       "name": "Woody",
       "image": "http://www.pngmart.com/files/3/Toy-Story-Woody-PNG-Photos.png",
-      "likes": 5
+      "likes": "9"
     },
     {
       "id": 2,
@@ -47,6 +47,30 @@
       "name": "Little Green Men",
       "image": "http://www.pngmart.com/files/3/Toy-Story-Alien-PNG-File.png",
       "likes": -2
+    },
+    {
+      "name": "Basketball",
+      "image": "angrybubbe.com",
+      "likes": 0,
+      "id": 9
+    },
+    {
+      "name": "Test User",
+      "image": "angrybubbe.com",
+      "likes": 0,
+      "id": 10
+    },
+    {
+      "name": "Test User",
+      "image": "angrybubbe.com",
+      "likes": 0,
+      "id": 11
+    },
+    {
+      "name": "Basketball",
+      "image": "this.url",
+      "likes": "1",
+      "id": 12
     }
   ]
 }
