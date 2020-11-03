@@ -83,24 +83,21 @@ function createNewToyFromForm(name, image) {
 
 
 function checkURL(url) {
-  checkStatus(url)
-  
-  // if (url.match(/\.(jpeg|jpg|gif|png)$/) == null) {
-  //   alert("Invalid image url")
-  //   return false;
-  // } else {
-  //   return true;
-  // };
 
-  
-  // debugger;
-  
+  if (url.match(/\.(jpeg|jpg|gif|png)$/) == null || checkStatus(url) == false ) {
+    alert("Invalid image url")
+    return false;
+  } else {
+    return true;
+  };  
 }
 
 function checkStatus(url) {
-  fetch(url)
-  
-  .then(response => response.status)
+  return fetch(url, {
+    mode: 'no-cors'
+  })
+  .then(response => response.ok)
+  .catch(() => console.log("Can’t access " + url + " response. Blocked by browser?"))
 }
 
 getToyCollection();
