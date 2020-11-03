@@ -22,6 +22,7 @@ function getToyCollection () {
   fetch('http://localhost:3000/toys')
     .then(response => response.json())
     .then(data => displayToys(data))
+    .catch(error => alert(error.messages))
 }
 
 function displayToys(dataset) {
@@ -59,24 +60,47 @@ function submitNewToy(event) {
 }
 
 function createNewToyFromForm(name, image) {
+  if (checkURL(image)) {
+    // debugger;
+    let formData = {
+      name,
+      image,
+      likes: "0"
+    };
+
+    let configObj = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json"
+      },
+      body: JSON.stringify(formData)
+
+    }
+    fetch("http://localhost:3000/toys", configObj)
+}
+}
+
+
+function checkURL(url) {
+  checkStatus(url)
+  
+  // if (url.match(/\.(jpeg|jpg|gif|png)$/) == null) {
+  //   alert("Invalid image url")
+  //   return false;
+  // } else {
+  //   return true;
+  // };
+
+  
   // debugger;
-  let formData = {
-    name,
-    image,
-    likes: "0"
-  };
+  
+}
 
-  let configObj = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json"
-    },
-    body: JSON.stringify(formData)
-
-  }
-  debugger;
-  fetch("http://localhost:3000/toys", configObj)
+function checkStatus(url) {
+  fetch(url)
+  
+  .then(response => response.status)
 }
 
 getToyCollection();
