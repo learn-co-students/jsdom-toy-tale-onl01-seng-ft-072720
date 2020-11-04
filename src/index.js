@@ -26,33 +26,40 @@ function getToyCollection () {
 }
 
 function displayToys(dataset) {
-  dataset.forEach(data => {
-    const toyCollection = document.querySelector("#toy-collection");
-    const div = document.createElement("div");
-    div.className = "card";
-    div.id = `toy-${data.id}`
-    toyCollection.appendChild(div);
+  console.log(dataset)
+  dataset.forEach(data => displayToy(data));
+}
 
-    const toyName = document.createElement("h2");
-    toyName.innerText = data["name"];
-    div.appendChild(toyName);
+function displayToy(data){
+  const form = document.querySelector("body > div.container > form");
+  
+  const toyCollection = document.querySelector("#toy-collection");
+  const div = document.createElement("div");
+  div.className = "card";
+  div.id = `toy-${data.id}`
+  toyCollection.appendChild(div);
 
-    const img = document.createElement("img");
-    img.src = data["image"]
-    img.className = "toy-avatar"
-    div.appendChild(img);
+  const toyName = document.createElement("h2");
+  toyName.innerText = data["name"];
+  div.appendChild(toyName);
 
-    const p = document.createElement("p");
-    p.innerText = `${data.likes} likes`;
-    div.appendChild(p);
+  const img = document.createElement("img");
+  img.src = data["image"]
+  img.className = "toy-avatar"
+  div.appendChild(img);
 
-    const button = document.createElement("button");
-    button.className = "like-btn";
-    button.innerText = "Like <3";
-    div.appendChild(button);
+  const p = document.createElement("p");
+  p.innerText = `${data.likes} likes`;
+  div.appendChild(p);
 
-    createLikeButtons();
-  })
+  const button = document.createElement("button");
+  button.className = "like-btn";
+  button.innerText = "Like <3";
+  div.appendChild(button);
+
+  form.reset();
+  createLikeButtons();
+
 }
 
 function createLikeButtons() {
@@ -66,8 +73,10 @@ const buttons = document.querySelectorAll(".like-btn");
 function addLike(event){
   event.preventDefault();
   const cardId = event.path[1].id.split("toy-")[1];
+  const likesObject = event.target.parentElement.querySelector("p")
   let numLikes = event.target.parentElement.querySelector("p").innerText.split(" ")[0];
-  numLikes++;
+  ++numLikes;
+  
 
   fetch(`http://localhost:3000/toys/${cardId}`, {
     method: "PATCH",
@@ -79,6 +88,7 @@ function addLike(event){
       "likes":`${numLikes}`
     })
   })
+  .then(likesObject.innerText = `${numLikes} likes`)
 }
 
 function submitNewToy(event) {
@@ -89,8 +99,6 @@ function submitNewToy(event) {
 }
 
 function createNewToyFromForm(name, image) {
-  // if (checkURL(image)) {
-    // debugger;
     let formData = {
       name,
       image,
@@ -107,7 +115,8 @@ function createNewToyFromForm(name, image) {
 
     }
     fetch("http://localhost:3000/toys", configObj)
-// }
+    .then(resp => resp.json())
+    .then(data => displayToy(data))
 }
 
 
