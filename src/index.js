@@ -30,6 +30,7 @@ function displayToys(dataset) {
     const toyCollection = document.querySelector("#toy-collection");
     const div = document.createElement("div");
     div.className = "card";
+    div.id = `toy-${data.id}`
     toyCollection.appendChild(div);
 
     const toyName = document.createElement("h2");
@@ -49,6 +50,34 @@ function displayToys(dataset) {
     button.className = "like-btn";
     button.innerText = "Like <3";
     div.appendChild(button);
+
+    createLikeButtons();
+  })
+}
+
+function createLikeButtons() {
+
+const buttons = document.querySelectorAll(".like-btn");
+  buttons.forEach(button => {
+    button.addEventListener("click", addLike)
+  })
+}
+
+function addLike(event){
+  event.preventDefault();
+  const cardId = event.path[1].id.split("toy-")[1];
+  let numLikes = event.target.parentElement.querySelector("p").innerText.split(" ")[0];
+  numLikes++;
+
+  fetch(`http://localhost:3000/toys/${cardId}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json"
+    }, 
+    body: JSON.stringify({
+      "likes":`${numLikes}`
+    })
   })
 }
 
@@ -60,7 +89,7 @@ function submitNewToy(event) {
 }
 
 function createNewToyFromForm(name, image) {
-  if (checkURL(image)) {
+  // if (checkURL(image)) {
     // debugger;
     let formData = {
       name,
@@ -78,13 +107,13 @@ function createNewToyFromForm(name, image) {
 
     }
     fetch("http://localhost:3000/toys", configObj)
+// }
 }
-}
 
 
-function checkURL(url) {
-
-  if (url.match(/\.(jpeg|jpg|gif|png)$/) == null || checkStatus(url) == false ) {
+function checkURL(url, status) {
+  debugger
+  if (url.match(/\.(jpeg|jpg|gif|png)$/) == null || status.ok == false ) {
     alert("Invalid image url")
     return false;
   } else {
@@ -93,13 +122,18 @@ function checkURL(url) {
 }
 
 function checkStatus(url) {
-  return fetch(url, {
-    mode: 'no-cors'
+  fetch(url, {
+    mode: 'no-cors',
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json"
+    }
   })
-  .then(response => response.ok)
-  .catch(() => console.log("Can’t access " + url + " response. Blocked by browser?"))
+  .then(function(status) {
+    checkURL(url, status)
+  })
 }
 
-getToyCollection();
 
-const toyCollection = document.querySelector("#toy-collection")
+
+getToyCollection();
